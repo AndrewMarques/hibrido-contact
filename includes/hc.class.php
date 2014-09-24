@@ -10,6 +10,13 @@ class HC
     private static $version = '0.1.0';
 
     /**
+     * @access private
+     * @var array
+     * @static
+     */
+    private static $ignoredFields = array('nonce', 'action');
+
+    /**
      * @access public
      * @static
      * @return void
@@ -74,6 +81,10 @@ class HC
 
         $defaultMessage = '';
         foreach ($post as $field => $value) {
+            if (in_array($field, static::$ignoredFields)) {
+                continue;
+            }
+
             $defaultMessage .= ucfirst($field) .': '. $value ."\n\r";
         }
         $defaultMessage = rtrim($defaultMessage);
