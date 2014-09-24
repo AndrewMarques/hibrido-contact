@@ -5,7 +5,7 @@ esse plugin wodpress foi desenvolvido para facilitar o envio e manipulação de 
 
 # utilizar
 
-para utilizarmos o plugin, precisamos criar uma tag `<form>` com o atributo `data-hc-form`, onde esse form será o form que será enviado por email (na verdade os dados contidos nele serão enviados por email)
+para utilizarmos o plugin, precisamos criar uma tag `<form>` com o atributo `data-hc-form`, `method=post` e `action` igual a `admin_url('admin-ajax.php')`, onde esse form será o form que será enviado por email (na verdade os dados contidos nele serão enviados por email)
 
 após enviarmos nossa requisição receberemos um feedback, para mostrarmos esse feedback precisamos criar qualquer elemento com o atributo `data-hc-feedback`, onde esse elemento além de receber a mensagem de resposta, receberá uma classe indicando o status da resposta `success` para sucesso e `error` para erro
 
