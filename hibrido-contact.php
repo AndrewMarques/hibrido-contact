@@ -21,5 +21,11 @@ load_plugin_textdomain('hc', false, dirname(plugin_basename(__FILE__)) . '/langu
 // main class
 require_once __DIR__ . '/includes/hc.class.php';
 
+// activation hook
+register_activation_hook(__FILE__, array('HC', 'activate'));
+
+// deactivation hook
+register_deactivation_hook(__FILE__, array('HC', 'deactivate'));
+
 // algumas diretivas precisamos sempre
 HC::always();

@@ -33,6 +33,51 @@ class HC
      * @static
      * @return void
      */
+    public static function activate()
+    {
+        $timestamp = wp_next_scheduled('hc_clean_tmp');
+
+        if ($timestamp == false) {
+            wp_schedule_event(time(), 'daily', 'hc_clean_tmp');
+        }
+    }
+
+    /**
+     * @access public
+     * @static
+     * @return void
+     */
+    public static function deactivate()
+    {
+        wp_clear_scheduled_hook('hc_clean_tmp');
+    }
+
+    /**
+     * @access public
+     * @static
+     * @return void
+     */
+    public static function cleanTmp()
+    {
+        $tmpdir = wp_upload_dir();
+        $tmpdir = $tmpdir['basedir'] .'/hc-tmp';
+
+        if (is_dir($tmpdir)) {
+            $glob = array_merge(
+                array(),
+                glob($tmpdir .'/*'),
+                glob($tmpdir .'/**/*')
+            );
+
+            array_map('unlink', $glob);
+        }
+    }
+
+    /**
+     * @access public
+     * @static
+     * @return void
+     */
     public static function init()
     {
         // scripts
@@ -111,7 +156,49 @@ class HC
 
         $headers = apply_filters('hc-mail-headers', $headers);
 
-        if (wp_mail($to, $subject, $message, $headers)) {
+        // attachments
+        $attchs = array();
+
+        if ( ! empty($_FILES)) {
+            $tmpdir = wp_upload_dir();
+            $tmpdir = $tmpdir['basedir'] .'/hc-tmp/';
+
+            if ( ! is_dir($tmpdir)) {
+                $oldmask = umask(0);
+
+                if ( ! mkdir($tmpdir)) {
+                    die(json_encode(array(
+                        'success' => false,
+                        'message' => __('Ocorreu um erro durante o envio', 'hc')
+                    )));
+                }
+
+                umask($oldmask);
+            }
+
+            foreach ($_FILES as $key => $file) {
+                if ( ! is_array($file['name'])) {
+                    foreach ($file as $k => $v) {
+                        $file[$k] = (array) $v;
+                    }
+                }
+
+                foreach ($file['error'] as $_key => $error) {
+                    if ($error != UPLOAD_ERR_OK) {
+                        continue;
+                    }
+
+                    $tmp_name = $file["tmp_name"][$_key];
+                    $name = $file["name"][$_key];
+                    $path = $tmpdir .'/'. $name;
+                    move_uploaded_file($tmp_name, $path);
+
+                    $attchs[] = $path;
+                }
+            }
+        }
+
+        if (wp_mail($to, $subject, $message, $headers, $attchs)) {
             $response = array(
                 'success' => true,
                 'message' => __('Enviado com sucesso', 'hc')

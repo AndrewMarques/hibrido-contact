@@ -29,11 +29,16 @@ $message | todos os campos com seus valores | pelo filtro
 $from | blogname <admin email> | pelo filtro
 $replyTo | nenhum | campo nome <campo email> e depois pelo filtro
 $headers | array($from, $replyTo) | pelo filtro
+$attachments | nenhum | quando algum arquivo é enviado pelo formulario (`$_FILES`) ele é automáticamente adicionado como anexo (independente do nome do campo `type=file`)
+
+### observações
+
+para enviarmos corretamente os arquivos como anexo, criamos uma pasta temporária na pasta de uploads chamada hc-tmp a qual é automaticamente limpa após o envio
 
 ## filtros
 
 filtro | descrição
------  | ---------
+------ | ---------
 hc-mail-post | aplica filtros no $_POST, passando o $_POST como argumento
 hc-mail-to | aplica filtros no remetente, passando o remetente padrão como argumento
 hc-mail-subject | aplica filtros no assunto do email, passando o assunto padrão como argumento
