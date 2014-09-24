@@ -11,6 +11,8 @@ após enviarmos nossa requisição receberemos um feedback, para mostrarmos esse
 
 quando clicamos para enviar o formulário o texto do botão é trocado, então, para que nenhum erro ocorra e consigamos enviar o formulário, precisamos que o botão de envio seja um tag button no estilo `<button type="submit">Enviar</button>`
 
+outra coisa que precisamos lembrar é que onde o form for utilizado precisamos chamar o código de inicio `HC::init()`
+
 # campos
 
 ## campos da mensagem de email
