@@ -33,7 +33,7 @@ $attachments | nenhum | quando algum arquivo é enviado pelo formulario (`$_FILE
 
 ### observações
 
-para enviarmos corretamente os arquivos como anexo, criamos uma pasta temporária na pasta de uploads chamada hc-tmp a qual é automaticamente limpa após o envio
+para enviarmos corretamente os arquivos como anexo, criamos uma pasta temporária na pasta de uploads chamada hc-tmp a qual é automaticamente limpa via wp cron
 
 ## filtros
 
