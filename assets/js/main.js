@@ -6,43 +6,47 @@ jQuery(document).ready(function ($) {
         return;
     }
 
-    var $feedback = $('[data-hc-feedback]');
+    $form.each(function () {
+        var $_form = $(this);
 
-    if ( ! $feedback.length) {
-        console.log('no [data-hc-feedback] found');
-        return;
-    }
+        var $feedback = $_form.find('[data-hc-feedback]');
 
-    var $button = $form.find('button[type=submit]');
-
-    if ( ! $button.length) {
-        console.log('no button[type=submit] found');
-        return;
-    }
-
-    var oldText = $button.text();
-
-    $form.ajaxForm({
-        dataType: 'json',
-        data: {
-            action: hc.action,
-            nonce : hc.nonce
-        },
-        beforeSend: function () {
-            $feedback.removeClass('error success').html('');
-            $button.text(hc.loadingText).attr('disabled', '');
-        },
-        complete: function () {
-            $button.text(oldText).removeAttr('disabled');
-        },
-        success: function (response) {
-            if (response.success) {
-                $feedback.addClass('success');
-            } else {
-                $feedback.addClass('error');
-            }
-
-            $feedback.html(response.message);
+        if ( ! $feedback.length) {
+            console.log('no [data-hc-feedback] found');
+            return;
         }
+
+        var $button = $_form.find('button[type=submit]');
+
+        if ( ! $button.length) {
+            console.log('no button[type=submit] found');
+            return;
+        }
+
+        var oldText = $button.text();
+
+        $_form.ajaxForm({
+            dataType: 'json',
+            data: {
+                action: hc.action,
+                nonce : hc.nonce
+            },
+            beforeSend: function () {
+                $feedback.removeClass('error success').html('');
+                $button.text(hc.loadingText).attr('disabled', '');
+            },
+            complete: function () {
+                $button.text(oldText).removeAttr('disabled');
+            },
+            success: function (response) {
+                if (response.success) {
+                    $feedback.addClass('success');
+                } else {
+                    $feedback.addClass('error');
+                }
+
+                $feedback.html(response.message);
+            }
+        });
     });
 });
